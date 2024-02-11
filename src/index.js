@@ -1,13 +1,28 @@
-function generatePoem(event) {
-  event.preventDefault();
-
+function displayPoem(response) {
+  console.log("poem generated");
   new Typewriter("#poem", {
-    strings:
-      "I hate the way talk to me, and the way you cut your hair. I hate the way you drive my car, I hate it when you stare. I hate your big dumb combat boots and the way you read my mind. I hate you so much it makes me sick, it even makes me rhyme. I hate the way you're always right. I hate it when you lie. I hate when you make laugh, even worse when you make me cry. I hate it when you're not around, and the fact that you didn't call. But mostly I hate the why I don't hate, not even close, not even a little bit, not even at all.",
+    strings: response.data.answer,
     autoStart: true,
     delay: 8,
     cursor: "",
   });
+}
+
+function generatePoem(event) {
+  event.preventDefault();
+
+  let submissionInput = document.querySelector("#user-submission");
+  let apiKey = "22f8da0004607a380oa863e4bc7fdtdd";
+  let prompt = `Generate a poem about ${submissionInput.value}`;
+  let context =
+    "You are a poem expert, from classic poems to poems from 21st century movies. The length of the poem doesn't matter but make sure to only generate one at a time. Please mention the author/poet of the poem at the end of the poem, and if the poem is from a movie or a TV-series, mention which movies/TV-series the poem comes from at the end of the poem. Your mission is to generate a poem in basic HTML.";
+  let apiURL = `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
+
+  console.log("Generating poem");
+  console.log(`Prompt: ${prompt}`);
+  console.log(`Context: ${context}`);
+
+  axios.get(apiURL).then(displayPoem);
 }
 
 let poemFormElement = document.querySelector("#poem-generator-form");
